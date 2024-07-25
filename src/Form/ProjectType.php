@@ -16,13 +16,13 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Project Name'
+                'label' => 'Titre du projet'
             ])
             ->add('employees', EntityType::class, [
                 'class' => Employee::class,
                 'choice_label' => 'firstName',
                 'multiple' => true,
-                'label' => 'Employees',
+                'label' => 'Inviter des membres',
             ]);
     }
 

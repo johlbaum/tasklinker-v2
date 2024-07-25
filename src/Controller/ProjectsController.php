@@ -13,8 +13,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ProjectsController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $manager,
+        private ProjectRepository $projectRepository,
+    ) {
+    }
+
     /**
-     * Page projets
+     * Page projets.
      */
     #[Route('/', name: 'app_home')]
     public function index(ProjectRepository $repository): Response
@@ -30,7 +36,7 @@ class ProjectsController extends AbstractController
     }
 
     /**
-     * Création d'un projet
+     * Création d'un projet.
      */
     #[Route('/project/creation', name: 'app_project_new')]
     public function new(Request $request, EntityManagerInterface $manager): Response
@@ -48,6 +54,44 @@ class ProjectsController extends AbstractController
 
         return $this->render('projects/new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Mise à jour d'un projet.
+     */
+    #[Route('/projet/{projectId}/edition', name: 'app_project_edit', requirements: ['projectId' => '\d+'])]
+    public function edit(int $projectId, Request $request): Response
+    {
+        // On récupére le projet par son ID.
+        $project = $this->projectRepository->find($projectId);
+        if (!$project) {
+            throw $this->createNotFoundException('Le project n\'existe pas');
+        }
+
+        // On récupère l'id du projet.
+        $projectId = strval($project->getId());
+
+        // On récupère le nom du projet
+        $projectName = $project->getName();
+
+        // On crée le formulaire.
+        $form = $this->createForm(ProjectType::class, $project);
+
+        // On traite la soumission du formulaire.
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->manager->persist($project);
+            $this->manager->flush();
+
+            // On redirige l'utilisateur vers la home page.
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('projects/edit.html.twig', [
+            'form' => $form,
+            'projectId' => $projectId,
+            'projectName' => $projectName
         ]);
     }
 }

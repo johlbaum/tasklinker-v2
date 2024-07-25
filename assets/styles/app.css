@@ -267,6 +267,7 @@ button.button.button-submit {
     color: #ffffff;
     height: 70px;
     margin-top: 5px;
+    cursor: pointer;
 }
 
 form ul {
