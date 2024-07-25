@@ -18,7 +18,7 @@ class Project
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private ?bool $archive = null;
 
     /**
@@ -37,6 +37,7 @@ class Project
     {
         $this->employees = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->archive = false;
     }
 
     public function getId(): ?int
