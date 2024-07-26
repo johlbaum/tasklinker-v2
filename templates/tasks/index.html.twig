@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+	<div id="current-user"></div>
+	<div id="title-page">
+		<div class="flex-header" s>
+			<h1>{{ project.name }}</h1>
+			<div class="user-list">
+				<div class="avatar">ND</div>
+				<div class="avatar">DB</div>
+			</div>
+			<a class="button" href="{{ path('app_project_edit', {projectId: project.id}) }}">Modifier</a>
+		</div>
+	</div>
+{% endblock %}
+{% block body %}
+	<div id="tasks-container">
+		<div class="task-column">
+			<h2>To Do</h2>
+			<div class="tasks-list">
+				{% for task in tasksProject %}
+					{% if task.status.label == 'To do' %}
+						<a class="task" href="">
+							<h3>{{ task.title }}</h3>
+							<p>{{ task.description }}</p>
+							<div class="task-infos">
+								<div class="task-deadline">
+									<i class="fa-regular fa-calendar"></i>
+									{{ task.deadline|date('d/m/Y') }}
+								</div>
+							</div>
+						</a>
+					{% endif %}
+				{% endfor %}
+				<a href="" class="task-add">
+					+ Ajouter une tâche
+				</a>
+			</div>
+		</div>
+		<div class="task-column">
+			<h2>Doing</h2>
+			<div class="tasks-list">
+				{% for task in tasksProject %}
+					{% if task.status.label == 'Doing' %}
+						<a class="task" href="">
+							<h3>{{ task.title }}</h3>
+							<p>{{ task.description }}</p>
+							<div class="task-infos">
+								<div class="task-deadline">
+									<i class="fa-regular fa-calendar"></i>
+									{{ task.deadline|date('d/m/Y') }}
+								</div>
+								<div class="mini-user">
+									DB
+								</div>
+							</div>
+
+						</a>
+					{% endif %}
+				{% endfor %}
+				<a href="" class="task-add">
+					+ Ajouter une tâche
+				</a>
+			</div>
+		</div>
+		<div class="task-column">
+			<h2>Done</h2>
+			<div class="tasks-list">
+				{% for task in tasksProject %}
+					{% if task.status.label == 'Done' %}
+						<a class="task" href="">
+							<h3>{{ task.title }}</h3>
+							<p>{{ task.description }}</p>
+							<div class="task-infos">
+								<div class="task-deadline">
+									<i class="fa-regular fa-calendar"></i>
+									{{ task.deadline|date('d/m/Y') }}
+								</div>
+								<div class="mini-user">
+									DB
+								</div>
+							</div>
+						</a>
+					{% endif %}
+				{% endfor %}
+				<a href="" class="task-add">
+					+ Ajouter une tâche
+				</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}
