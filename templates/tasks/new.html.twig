@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+	<div id="current-user"></div>
+	<div id="title-page">
+		<h1>
+			Créer une tâche
+		</h1>
+	</div>
+{% endblock %}
+
+{% block body %}
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button class="button button-submit">Ajouter</button>
+	{{ form_end(form) }}
+{% endblock %}
