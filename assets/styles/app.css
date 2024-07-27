@@ -414,3 +414,87 @@ a.task-add {
     display: block;
     margin-left: 18px;
 }
+
+/* Employees */
+
+table#team-container {
+    width: 100%;
+    margin-top: 20px;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+table#team-container th {
+    color: #1C5B50;
+    font-size: 18px;
+    text-align: left;
+    border-bottom: 1px solid #D9D9D9;
+    padding: 15px 20px;
+    padding-bottom: 35px;
+}
+
+table#team-container tbody tr:nth-child(2n + 1) td {
+    background: #FFFFFF;
+}
+
+table#team-container tr td {
+    border-bottom: 1px solid #D9D9D9;
+    padding: 15px 20px;
+}
+
+.employee-infos {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.employee-avatar {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Manrope;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #fff;
+    background: #1C5B50;
+    border-radius: 50%;
+}
+
+.employee-coords {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    line-height: 24px;
+    color: #202020;
+}
+
+table#team-container tbody tr td:last-child {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    max-width: 315px;
+}
+
+a.button-edit-team {
+    background: #1F5B50;
+    color: #FEFBFB;
+    text-decoration: none;
+    width: 125px;
+    justify-content: center;
+}
+
+a.delete-team {
+    color: #E14343;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+table#team-container thead tr th:last-child {
+    max-width: 315px;
+    width: 315px;
+}
