@@ -23,7 +23,7 @@ class ProjectsController extends AbstractController
      * Page projets.
      */
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function index(): Response
+    public function showProjects(): Response
     {
         $projects = $this->projectRepository->findActiveProjects();
 
@@ -36,7 +36,7 @@ class ProjectsController extends AbstractController
      * Création d'un projet.
      */
     #[Route('/project/creation', name: 'app_project_new', methods: ['POST', 'GET'])]
-    public function new(Request $request): Response
+    public function createProject(Request $request): Response
     {
         $project = new Project();
 
@@ -59,7 +59,7 @@ class ProjectsController extends AbstractController
      * Mise à jour d'un projet.
      */
     #[Route('/projet/{projectId}/edition', name: 'app_project_edit', requirements: ['projectId' => '\d+'], methods: ['POST', 'GET'])]
-    public function edit(int $projectId, Request $request): Response
+    public function editProject(int $projectId, Request $request): Response
     {
         $project = $this->projectRepository->find($projectId);
         if (!$project) {
@@ -85,8 +85,8 @@ class ProjectsController extends AbstractController
     /**
      * Archivage d'un projet.
      */
-    #[Route('/projet/{projectId}/archiver', name: 'app_project_archive', requirements: ['projectId' => '\d+'], methods: ['POST'])]
-    public function archive(int $projectId): Response
+    #[Route('/projet/{projectId}/archiver', name: 'app_project_archive', requirements: ['projectId' => '\d+'], methods: ['POST', 'GET'])]
+    public function archiveProject(int $projectId): Response
     {
         $project = $this->projectRepository->find($projectId);
         if (!$project) {

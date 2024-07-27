@@ -11,6 +11,9 @@
 	{{ form_start(form) }}
 	{{ form_widget(form) }}
 	<button class="button button-submit">Modifier</button>
-	<a href="" class="delete-task">Supprimer la tâche</a>
+	{# <a href="{{ path('app_task_delete', {taskId: taskId, projectId: projectId}) }}" class="delete-task">Supprimer la tâche</a> #}
 	{{ form_end(form) }}
+	<form action="{{ path('app_task_delete', {taskId: taskId, projectId: projectId}) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
+		<button type="submit" class="delete-task">Supprimer la tâche</button>
+	</form>
 {% endblock %}

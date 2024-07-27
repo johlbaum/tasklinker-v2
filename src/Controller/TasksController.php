@@ -17,7 +17,6 @@ class TasksController extends AbstractController
     public function __construct(
         private EntityManagerInterface $manager,
         private ProjectRepository $projectRepository,
-        private EntityManagerInterface $entityManagerInterface,
         private TaskRepository $taskRepository
     ) {
     }
@@ -25,9 +24,12 @@ class TasksController extends AbstractController
      * Affichage de toutes les tâches d'un projet.
      */
     #[Route('/projet/{projectId}/taches', name: 'app_tasks_show', requirements: ['projectId' => '\d+'], methods: ['GET'])]
-    public function index(int $projectId): Response
+    public function showTasks(int $projectId): Response
     {
         $project = $this->projectRepository->find($projectId);
+        if (!$project) {
+            throw $this->createNotFoundException('Le projet n\'existe pas');
+        }
 
         $tasksProject = $project->getTasks();
 
@@ -40,10 +42,13 @@ class TasksController extends AbstractController
     /**
      * Création d'une tâche.
      */
-    #[Route('/projet/{projectId}/tache/creation', name: 'app_task_create', methods: ['GET', 'POST'])]
-    public function new(int $projectId, Request $request): Response
+    #[Route('/projet/{projectId}/tache/creation', name: 'app_task_create', requirements: ['projectId' => '\d+'], methods: ['GET', 'POST'])]
+    public function createTask(int $projectId, Request $request): Response
     {
         $project = $this->projectRepository->find($projectId);
+        if (!$project) {
+            throw $this->createNotFoundException('Le projet n\'existe pas');
+        }
 
         // On crée une nouvelle tâche et on renseigne le projet auquel elle est associée.
         $task = new Task();
@@ -67,10 +72,13 @@ class TasksController extends AbstractController
     /**
      * Mise à jour d'une tâche.
      */
-    #[Route('/projet/{projectId}/tache/{taskId}/edition', name: 'app_task_edit', methods: ['GET', 'POST'])]
-    public function edit(int $taskId, int $projectId, Request $request): Response
+    #[Route('/projet/{projectId}/tache/{taskId}/edition', name: 'app_task_edit', requirements: ['projectId' => '\d+', 'taskId' => '\d+'], methods: ['GET', 'POST'])]
+    public function editTask(int $taskId, int $projectId, Request $request): Response
     {
         $task = $this->taskRepository->find($taskId);
+        if (!$task) {
+            throw $this->createNotFoundException('La tâche n\'existe pas');
+        }
 
         $form = $this->createForm(TaskType::class, $task);
 
@@ -83,7 +91,26 @@ class TasksController extends AbstractController
         }
 
         return $this->render('tasks/edit_delete.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'taskId' => $taskId,
+            'projectId' => $projectId
         ]);
+    }
+
+    /**
+     * Suppression d'une tâche.
+     */
+    #[Route('/projet/{projectId}/tache/{taskId}/suppression', name: 'app_task_delete', requirements: ['projectId' => '\d+', 'taskId' => '\d+'], methods: ['POST'])]
+    public function deleteTask(int $projectId, int $taskId): Response
+    {
+        $task = $this->taskRepository->find($taskId);
+        if (!$task) {
+            throw $this->createNotFoundException('La tâche n\'existe pas');
+        }
+
+        $this->manager->remove($task);
+        $this->manager->flush();
+
+        return $this->redirectToRoute('app_tasks_show', ['projectId' => $projectId]);
     }
 }
