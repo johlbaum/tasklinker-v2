@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+	<div id="current-user"></div>
+	<div id="title-page">
+		<h1>Gestion des droits d'accès</h1>
+	</div>
+{% endblock %}
+
+{% block body %}
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button class="button button-submit">Modifier</button>
+	<a href="" class="delete-task">Supprimer la tâche</a>
+	{{ form_end(form) }}
+{% endblock %}

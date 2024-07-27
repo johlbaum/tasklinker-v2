@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
+use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,13 +14,20 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TasksController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $manager,
+        private ProjectRepository $projectRepository,
+        private EntityManagerInterface $entityManagerInterface,
+        private TaskRepository $taskRepository
+    ) {
+    }
     /**
      * Affichage de toutes les tâches d'un projet.
      */
     #[Route('/projet/{projectId}/taches', name: 'app_tasks_show', requirements: ['projectId' => '\d+'], methods: ['GET'])]
-    public function index(int $projectId, ProjectRepository $projectRepository): Response
+    public function index(int $projectId): Response
     {
-        $project = $projectRepository->find($projectId);
+        $project = $this->projectRepository->find($projectId);
 
         $tasksProject = $project->getTasks();
 
@@ -33,9 +41,9 @@ class TasksController extends AbstractController
      * Création d'une tâche.
      */
     #[Route('/projet/{projectId}/tache/creation', name: 'app_task_create', methods: ['GET', 'POST'])]
-    public function new(int $projectId, EntityManagerInterface $manager, Request $request, ProjectRepository $projectRepository): Response
+    public function new(int $projectId, Request $request): Response
     {
-        $project = $projectRepository->find($projectId);
+        $project = $this->projectRepository->find($projectId);
 
         // On crée une nouvelle tâche et on renseigne le projet auquel elle est associée.
         $task = new Task();
@@ -45,14 +53,37 @@ class TasksController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->persist($task);
-            $manager->flush();
+            $this->manager->persist($task);
+            $this->manager->flush();
 
             return $this->redirectToRoute('app_tasks_show', ['projectId' => $projectId]);
         }
 
         return $this->render('tasks/new.html.twig', [
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * Mise à jour d'une tâche.
+     */
+    #[Route('/projet/{projectId}/tache/{taskId}/edition', name: 'app_task_edit', methods: ['GET', 'POST'])]
+    public function edit(int $taskId, int $projectId, Request $request): Response
+    {
+        $task = $this->taskRepository->find($taskId);
+
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->manager->persist($task);
+            $this->manager->flush();
+
+            return $this->redirectToRoute('app_tasks_show', ['projectId' => $projectId]);
+        }
+
+        return $this->render('tasks/edit_delete.html.twig', [
+            'form' => $form
         ]);
     }
 }
