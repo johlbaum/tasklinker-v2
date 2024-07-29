@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+	<div id="current-user"></div>
+	<div id="title-page">
+		<h1>{{ employee.firstName }}</h1>
+	</div>
+{% endblock %}
+
+{% block body %}
+	{{ form_start(form) }}
+	{{ form_row(form.firstName) }}
+	{{ form_row(form.lastName) }}
+	{{ form_row(form.email) }}
+	<div class="form-flex">
+		{{ form_row(form.entryDate) }}
+		{{ form_row(form.status) }}
+	</div>
+	<button class="button button-submit">Enregistrer</button>
+	{{ form_end(form) }}
+{% endblock %}
