@@ -32,6 +32,7 @@ class Task
     private ?Status $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Employee $employee = null;
 
     public function getId(): ?int
