@@ -11,25 +11,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\EntityManagerService;
 
 class TasksController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $manager,
+        private TaskRepository $taskRepository,
         private ProjectRepository $projectRepository,
-        private TaskRepository $taskRepository
+        private EntityManagerService $entityManagerService
     ) {
     }
+
     /**
      * Affichage de toutes les tâches d'un projet.
      */
     #[Route('/projet/{projectId}/taches', name: 'app_tasks_show', requirements: ['projectId' => '\d+'], methods: ['GET'])]
     public function showTasks(int $projectId): Response
     {
-        $project = $this->projectRepository->find($projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas');
-        }
+        $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
 
         $tasksProject = $project->getTasks();
 
@@ -46,10 +46,7 @@ class TasksController extends AbstractController
     public function createTask(int $projectId, Request $request): Response
     {
         // On récupère le projet auquel la tâche va être associée.
-        $project = $this->projectRepository->find($projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas');
-        }
+        $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
 
         // On crée une nouvelle tâche et on renseigne le projet auquel elle est associée.
         $task = new Task();
@@ -63,9 +60,9 @@ class TasksController extends AbstractController
         ]);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($task);
-            $this->manager->flush();
+            $this->entityManagerService->save($task);
 
             return $this->redirectToRoute('app_tasks_show', ['projectId' => $projectId]);
         }
@@ -82,16 +79,10 @@ class TasksController extends AbstractController
     public function editTask(int $taskId, int $projectId, Request $request): Response
     {
         // On récupère le projet auquel la tâche est associée.
-        $project = $this->projectRepository->find($projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas');
-        }
+        $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
 
         // On récupère la tâche à mettre à jour.
-        $task = $this->taskRepository->find($taskId);
-        if (!$task) {
-            throw $this->createNotFoundException('La tâche n\'existe pas');
-        }
+        $task = $this->entityManagerService->getEntity($this->taskRepository, $taskId);
 
         // On crée le formulaire et on ajoute les employés associés au projet en option du formulaire.
         $form = $this->createForm(TaskType::class, $task, [
@@ -99,9 +90,9 @@ class TasksController extends AbstractController
         ]);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($task);
-            $this->manager->flush();
+            $this->entityManagerService->save($task);
 
             return $this->redirectToRoute('app_tasks_show', ['projectId' => $projectId]);
         }
@@ -119,13 +110,9 @@ class TasksController extends AbstractController
     #[Route('/projet/{projectId}/tache/{taskId}/suppression', name: 'app_task_delete', requirements: ['projectId' => '\d+', 'taskId' => '\d+'], methods: ['POST'])]
     public function deleteTask(int $projectId, int $taskId): Response
     {
-        $task = $this->taskRepository->find($taskId);
-        if (!$task) {
-            throw $this->createNotFoundException('La tâche n\'existe pas');
-        }
+        $task = $this->entityManagerService->getEntity($this->taskRepository, $taskId);
 
-        $this->manager->remove($task);
-        $this->manager->flush();
+        $this->entityManagerService->remove($task);
 
         return $this->redirectToRoute('app_tasks_show', ['projectId' => $projectId]);
     }

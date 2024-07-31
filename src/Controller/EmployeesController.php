@@ -9,12 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\EntityManagerService;
 
 class EmployeesController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $manager,
         private EmployeeRepository $employeeRepository,
+        private EntityManagerService $entityManagerService
     ) {
     }
 
@@ -37,17 +39,14 @@ class EmployeesController extends AbstractController
     #[Route('/employe/{employeeId}/edition', name: 'app_employee_edit', requirements: ['employeeId' => '\d+', 'taskId' => '\d+'], methods: ['GET', 'POST'])]
     public function editEmpoyee(int $employeeId, Request $request): Response
     {
-        $employee = $this->employeeRepository->find($employeeId);
-        if (!$employee) {
-            throw $this->createNotFoundException('L\'employé n\'existe pas');
-        }
+        $employee = $this->entityManagerService->getEntity($this->employeeRepository, $employeeId);
 
         $form = $this->createForm(EmployeeType::class, $employee);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($employee);
-            $this->manager->flush();
+            $this->entityManagerService->save($employee);
 
             return $this->redirectToRoute('app_employee');
         }
@@ -64,13 +63,9 @@ class EmployeesController extends AbstractController
     #[Route('/employe/{employeeId}/suppression', name: 'app_employee_delete', requirements: ['employeeId' => '\d+', 'taskId' => '\d+'], methods: ['POST', 'GET'])]
     public function deleteEmployee(int $employeeId): Response
     {
-        $employee = $this->employeeRepository->find($employeeId);
-        if (!$employee) {
-            throw $this->createNotFoundException('L\'employé n\'existe pas');
-        }
+        $employee = $this->entityManagerService->getEntity($this->employeeRepository, $employeeId);
 
-        $this->manager->remove($employee);
-        $this->manager->flush();
+        $this->entityManagerService->remove($employee);
 
         return $this->redirectToRoute('app_employee');
     }

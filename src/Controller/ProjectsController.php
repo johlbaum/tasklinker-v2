@@ -10,12 +10,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\EntityManagerService;
 
 class ProjectsController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $manager,
         private ProjectRepository $projectRepository,
+        private EntityManagerService $entityManagerService
     ) {
     }
 
@@ -43,9 +45,9 @@ class ProjectsController extends AbstractController
         $form = $this->createForm(ProjectType::class, $project);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($project);
-            $this->manager->flush();
+            $this->entityManagerService->save($project);
 
             return $this->redirectToRoute('app_home');
         }
@@ -61,17 +63,14 @@ class ProjectsController extends AbstractController
     #[Route('/projet/{projectId}/edition', name: 'app_project_edit', requirements: ['projectId' => '\d+'], methods: ['POST', 'GET'])]
     public function editProject(int $projectId, Request $request): Response
     {
-        $project = $this->projectRepository->find($projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas');
-        }
+        $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
 
         $form = $this->createForm(ProjectType::class, $project);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($project);
-            $this->manager->flush();
+            $this->entityManagerService->save($project);
 
             return $this->redirectToRoute('app_home');
         }
@@ -88,15 +87,11 @@ class ProjectsController extends AbstractController
     #[Route('/projet/{projectId}/archiver', name: 'app_project_archive', requirements: ['projectId' => '\d+'], methods: ['POST', 'GET'])]
     public function archiveProject(int $projectId): Response
     {
-        $project = $this->projectRepository->find($projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas');
-        }
+        $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
 
         $project->setArchive('true');
 
-        $this->manager->persist($project);
-        $this->manager->flush();
+        $this->entityManagerService->save($project);
 
         return $this->redirectToRoute('app_home');
     }
