@@ -45,6 +45,7 @@ class TasksController extends AbstractController
     #[Route('/projet/{projectId}/tache/creation', name: 'app_task_create', requirements: ['projectId' => '\d+'], methods: ['GET', 'POST'])]
     public function createTask(int $projectId, Request $request): Response
     {
+        // On récupère le projet auquel la tâche va être associée.
         $project = $this->projectRepository->find($projectId);
         if (!$project) {
             throw $this->createNotFoundException('Le projet n\'existe pas');
@@ -54,7 +55,12 @@ class TasksController extends AbstractController
         $task = new Task();
         $task->setProject($project);
 
-        $form = $this->createForm(TaskType::class, $task);
+        // On crée le formulaire et on ajoute les employés associés au projet en option du formulaire.
+        // Objectif : Restreindre la liste des employés sélectionnables pour une tâche aux seuls employés 
+        // participant au projet auquel la tâche est rattachée.
+        $form = $this->createForm(TaskType::class, $task, [
+            'projectEmployees' => $project->getEmployees()
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -75,12 +81,22 @@ class TasksController extends AbstractController
     #[Route('/projet/{projectId}/tache/{taskId}/edition', name: 'app_task_edit', requirements: ['projectId' => '\d+', 'taskId' => '\d+'], methods: ['GET', 'POST'])]
     public function editTask(int $taskId, int $projectId, Request $request): Response
     {
+        // On récupère le projet auquel la tâche est associée.
+        $project = $this->projectRepository->find($projectId);
+        if (!$project) {
+            throw $this->createNotFoundException('Le projet n\'existe pas');
+        }
+
+        // On récupère la tâche à mettre à jour.
         $task = $this->taskRepository->find($taskId);
         if (!$task) {
             throw $this->createNotFoundException('La tâche n\'existe pas');
         }
 
-        $form = $this->createForm(TaskType::class, $task);
+        // On crée le formulaire et on ajoute les employés associés au projet en option du formulaire.
+        $form = $this->createForm(TaskType::class, $task, [
+            'projectEmployees' => $project->getEmployees()
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
