@@ -35,7 +35,7 @@ class ProjectsController extends AbstractController
     /**
      * Création d'un projet.
      */
-    #[Route('/project/creation', name: 'app_project_new', methods: ['POST', 'GET'])]
+    #[Route('/projet/creation', name: 'app_project_new', methods: ['POST', 'GET'])]
     public function createProject(Request $request): Response
     {
         $project = new Project();
