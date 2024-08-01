@@ -11,8 +11,6 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 final class StatusFactory extends PersistentProxyObjectFactory
 {
 
-    private const STATUSES = ['To Do', 'Doing', 'Done'];
-
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
@@ -37,7 +35,7 @@ final class StatusFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'label' => self::faker()->unique()->randomElement(self::STATUSES),
+            'label' => 'To Do'
         ];
     }
 
