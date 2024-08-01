@@ -6,8 +6,10 @@
 		<div class="flex-header" s>
 			<h1>{{ project.name }}</h1>
 			<div class="user-list">
-				<div class="avatar">ND</div>
-				<div class="avatar">DB</div>
+				{% for projectEmployee in projectEmployees %}
+					<div class="avatar">{{ projectEmployee.avatar }}</div>
+				{% endfor %}
+
 			</div>
 			<a class="button" href="{{ path('app_project_edit', {projectId: project.id}) }}">Modifier</a>
 		</div>
@@ -27,6 +29,9 @@
 								<div class="task-deadline">
 									<i class="fa-regular fa-calendar"></i>
 									{{ task.deadline|date('d/m/Y') }}
+								</div>
+								<div class="mini-user">
+									{{ task.employee.avatar }}
 								</div>
 							</div>
 						</a>
@@ -51,7 +56,7 @@
 									{{ task.deadline|date('d/m/Y') }}
 								</div>
 								<div class="mini-user">
-									DB
+									{{ task.employee.avatar }}
 								</div>
 							</div>
 
@@ -77,7 +82,7 @@
 									{{ task.deadline|date('d/m/Y') }}
 								</div>
 								<div class="mini-user">
-									DB
+									{{ task.employee.avatar }}
 								</div>
 							</div>
 						</a>

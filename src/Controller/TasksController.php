@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\EntityManagerService;
+use App\Service\AvatarService;
+
 
 class TasksController extends AbstractController
 {
@@ -19,7 +21,8 @@ class TasksController extends AbstractController
         private EntityManagerInterface $manager,
         private TaskRepository $taskRepository,
         private ProjectRepository $projectRepository,
-        private EntityManagerService $entityManagerService
+        private EntityManagerService $entityManagerService,
+        private AvatarService $avatarService
     ) {
     }
 
@@ -29,13 +32,23 @@ class TasksController extends AbstractController
     #[Route('/projet/{projectId}/taches', name: 'app_tasks_show', requirements: ['projectId' => '\d+'], methods: ['GET'])]
     public function showTasks(int $projectId): Response
     {
+        // On récupère le projet et les employés associés.
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
+        $projectEmployees = $project->getEmployees()->toArray();
 
-        $tasksProject = $project->getTasks();
+        // On génère les avatars des employés associés au projet.
+        $this->avatarService->setAvatarsForProjectEmployees($projectEmployees);
+
+        // On récupère les tâches du projet.
+        $tasksProject = $project->getTasks()->toArray();
+
+        // On génère les avatars des employés associés aux tâches.
+        $this->avatarService->setAvatarsForTaskEmployees($tasksProject);
 
         return $this->render('tasks/index.html.twig', [
             'project' => $project,
-            'tasksProject' => $tasksProject
+            'tasksProject' => $tasksProject,
+            'projectEmployees' => $projectEmployees,
         ]);
     }
 

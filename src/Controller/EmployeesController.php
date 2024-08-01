@@ -10,13 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\EntityManagerService;
+use App\Service\AvatarService;
 
 class EmployeesController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $manager,
         private EmployeeRepository $employeeRepository,
-        private EntityManagerService $entityManagerService
+        private EntityManagerService $entityManagerService,
+        private AvatarService $avatarService
     ) {
     }
 
@@ -27,6 +29,9 @@ class EmployeesController extends AbstractController
     public function showEmployees(): Response
     {
         $employees = $this->employeeRepository->findAll();
+
+        // On génère les avatars des employés.
+        $this->avatarService->setAvatarsForAllEmployees($employees);
 
         return $this->render('employee/index.html.twig', [
             'employees' => $employees,
