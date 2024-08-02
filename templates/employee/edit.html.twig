@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+	{{ employee.firstName ~ ' ' ~ employee.lastName }}
+	- TaskLinker
+{% endblock %}
+
 {% block header %}
 	<div id="current-user"></div>
 	<div id="title-page">
-		<h1>{{ employee.firstName }}</h1>
+		<h1>{{ employee.firstName ~ ' ' ~ employee.lastName }}</h1>
 	</div>
 {% endblock %}
 

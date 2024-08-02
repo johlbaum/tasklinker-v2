@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+	{{ task.title }}
+	- TaskLinker
+{% endblock %}
+
 {% block header %}
 	<div id="current-user"></div>
 	<div id="title-page">
-		<h1>Gestion des droits d'accès</h1>
+		<h1>{{ task.title }}</h1>
 	</div>
 {% endblock %}
 
@@ -11,9 +16,8 @@
 	{{ form_start(form) }}
 	{{ form_widget(form) }}
 	<button class="button button-submit">Modifier</button>
-	{# <a href="{{ path('app_task_delete', {taskId: taskId, projectId: projectId}) }}" class="delete-task">Supprimer la tâche</a> #}
 	{{ form_end(form) }}
-	<form action="{{ path('app_task_delete', {taskId: taskId, projectId: projectId}) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
+	<form action="{{ path('app_task_delete', {taskId: task.id, projectId: projectId}) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
 		<button type="submit" class="delete-task">Supprimer la tâche</button>
 	</form>
 {% endblock %}
