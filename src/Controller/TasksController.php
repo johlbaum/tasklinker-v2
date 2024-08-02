@@ -112,7 +112,7 @@ class TasksController extends AbstractController
 
         return $this->render('tasks/edit_delete.html.twig', [
             'form' => $form,
-            'taskId' => $taskId,
+            'task' => $task,
             'projectId' => $projectId
         ]);
     }
