@@ -7,7 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[UniqueEntity(['email'])]
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
 {
@@ -16,18 +19,26 @@ class Employee
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Length(min: 4)]
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
+    #[Assert\Length(min: 4)]
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[Assert\NotBlank()]
+    #[Assert\Email()]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    #[Assert\NotBlank()]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $entryDate = null;
 
