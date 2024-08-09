@@ -44,9 +44,6 @@ class EmployeesController extends AbstractController
     public function editEmpoyee(int $employeeId, Request $request): Response
     {
         $employee = $this->entityManagerService->getEntity($this->employeeRepository, $employeeId);
-        if (!$employee) {
-            throw $this->createNotFoundException('L\'employé n\'existe pas.');
-        }
 
         $form = $this->createForm(EmployeeType::class, $employee);
 
@@ -71,9 +68,6 @@ class EmployeesController extends AbstractController
     public function deleteEmployee(int $employeeId): Response
     {
         $employee = $this->entityManagerService->getEntity($this->employeeRepository, $employeeId);
-        if (!$employee) {
-            throw $this->createNotFoundException('L\'employé n\'existe pas.');
-        }
 
         $this->entityManagerService->remove($employee);
 

@@ -33,9 +33,6 @@ class TasksController extends AbstractController
     {
         // On récupère le projet et les employés associés.
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas.');
-        }
         $projectEmployees = $project->getEmployees()->toArray();
 
         // On génère les avatars des employés associés au projet.
@@ -62,9 +59,6 @@ class TasksController extends AbstractController
     {
         // On récupère le projet auquel la tâche va être associée.
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas.');
-        }
 
         // On crée une nouvelle tâche et on renseigne le projet auquel elle est associée.
         $task = new Task();
@@ -98,15 +92,9 @@ class TasksController extends AbstractController
     {
         // On récupère le projet auquel la tâche est associée.
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
-        if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas.');
-        }
 
         // On récupère la tâche à mettre à jour.
         $task = $this->entityManagerService->getEntity($this->taskRepository, $taskId);
-        if (!$task) {
-            throw $this->createNotFoundException('La tâche n\'existe pas.');
-        }
 
         // On crée le formulaire et on ajoute les employés associés au projet en option du formulaire.
         $form = $this->createForm(TaskType::class, $task, [
@@ -135,9 +123,6 @@ class TasksController extends AbstractController
     public function deleteTask(int $projectId, int $taskId): Response
     {
         $task = $this->entityManagerService->getEntity($this->taskRepository, $taskId);
-        if (!$task) {
-            throw $this->createNotFoundException('La tâche n\'existe pas.');
-        }
 
         $this->entityManagerService->remove($task);
 
