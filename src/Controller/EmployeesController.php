@@ -19,8 +19,7 @@ class EmployeesController extends AbstractController
         private EmployeeRepository $employeeRepository,
         private EntityManagerService $entityManagerService,
         private AvatarService $avatarService
-    ) {
-    }
+    ) {}
 
     /**
      * Affichage des employés.
@@ -41,10 +40,13 @@ class EmployeesController extends AbstractController
     /**
      * Mise à jour d'un employé.
      */
-    #[Route('/employe/{employeeId}/edition', name: 'app_employee_edit', requirements: ['employeeId' => '\d+', 'taskId' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route('/employe/{employeeId}/edition', name: 'app_employee_edit', requirements: ['employeeId' => '\d+'], methods: ['GET', 'POST'])]
     public function editEmpoyee(int $employeeId, Request $request): Response
     {
         $employee = $this->entityManagerService->getEntity($this->employeeRepository, $employeeId);
+        if (!$employee) {
+            throw $this->createNotFoundException('L\'employé n\'existe pas.');
+        }
 
         $form = $this->createForm(EmployeeType::class, $employee);
 
@@ -65,10 +67,13 @@ class EmployeesController extends AbstractController
     /**
      * Suppression d'un employé.
      */
-    #[Route('/employe/{employeeId}/suppression', name: 'app_employee_delete', requirements: ['employeeId' => '\d+', 'taskId' => '\d+'], methods: ['POST', 'GET'])]
+    #[Route('/employe/{employeeId}/suppression', name: 'app_employee_delete', requirements: ['employeeId' => '\d+'], methods: ['POST', 'GET'])]
     public function deleteEmployee(int $employeeId): Response
     {
         $employee = $this->entityManagerService->getEntity($this->employeeRepository, $employeeId);
+        if (!$employee) {
+            throw $this->createNotFoundException('L\'employé n\'existe pas.');
+        }
 
         $this->entityManagerService->remove($employee);
 

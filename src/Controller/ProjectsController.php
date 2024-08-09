@@ -18,8 +18,7 @@ class ProjectsController extends AbstractController
         private EntityManagerInterface $manager,
         private ProjectRepository $projectRepository,
         private EntityManagerService $entityManagerService
-    ) {
-    }
+    ) {}
 
     /**
      * Page projets.
@@ -64,6 +63,9 @@ class ProjectsController extends AbstractController
     public function editProject(int $projectId, Request $request): Response
     {
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
+        if (!$project) {
+            throw $this->createNotFoundException('Le projet n\'existe pas.');
+        }
 
         $form = $this->createForm(ProjectType::class, $project);
 
@@ -88,6 +90,9 @@ class ProjectsController extends AbstractController
     public function archiveProject(int $projectId): Response
     {
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
+        if (!$project) {
+            throw $this->createNotFoundException('Le projet n\'existe pas.');
+        }
 
         $project->setArchive('true');
 

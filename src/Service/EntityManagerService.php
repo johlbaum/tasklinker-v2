@@ -10,8 +10,7 @@ class EntityManagerService
 {
     public function __construct(
         private EntityManagerInterface $manager
-    ) {
-    }
+    ) {}
 
     public function save(object $entity): void
     {
@@ -25,12 +24,9 @@ class EntityManagerService
         $this->manager->flush();
     }
 
-    public function getEntity(ObjectRepository $repository, int $id): object
+    public function getEntity(ObjectRepository $repository, int $id): ?object
     {
         $entity = $repository->find($id);
-        if (!$entity) {
-            throw new NotFoundHttpException('Entity not found');
-        }
 
         return $entity;
     }
