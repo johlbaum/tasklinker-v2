@@ -18,8 +18,9 @@ cd <NOM_DU_DOSSIER>
 ## 2. Installer les dépendances
 
 Installez les dépendances du projet en utilisant Composer avec la commande suivante :
-
+```bash
 composer install
+```
 
 ## 3. Configurer l’environnement
 
@@ -34,19 +35,21 @@ Remplacez `<utilisateur>` et `<mot_de_passe>` par les valeurs appropriées pour 
 ## 4. Créer la base de données
 
 Créez la base de données avec la commande suivante :
-
+```bash
 symfony console doctrine:database:create --if-not-exists
+```
 
 ## 5. Créer la structure de la base de données
 
 Appliquez les migrations pour créer la structure de la base de données :
-
+```bash
 symfony console doctrine:migrations:migrate  
+```
 
 ## 6. Générer les données de test
 
 Chargez les données de test avec la commande suivante :
-
+```bash
 symfony console doctrine:fixtures:load  
-
+```
 
