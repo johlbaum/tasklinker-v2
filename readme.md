@@ -27,7 +27,7 @@ Créez un fichier `.env.local` à la racine du projet.
 
 Ajoutez la ligne suivante dans le fichier `.env.local` :
 
-DATABASE_URL="mysql://<utilisateur>:<mot_de_passe>@127.0.0.1:8889/tasklinker?charset=utf8"
+DATABASE_URL="mysql://utilisateur:mot_de_passe@127.0.0.1:8889/tasklinker?charset=utf8"
 
 Remplacez `<utilisateur>` et `<mot_de_passe>` par les valeurs appropriées pour votre environnement.
 
