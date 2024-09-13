@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Project;
+use App\Factory\EmployeeFactory;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
@@ -15,9 +16,7 @@ final class ProjectFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -33,7 +32,7 @@ final class ProjectFactory extends PersistentProxyObjectFactory
     {
         return [
             'archive' => false,
-            'name' => self::faker()->company(),
+            'employees' => EmployeeFactory::randomRange(1, 3),
         ];
     }
 

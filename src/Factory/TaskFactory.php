@@ -15,9 +15,7 @@ final class TaskFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -33,11 +31,7 @@ final class TaskFactory extends PersistentProxyObjectFactory
     {
         return [
             'project' => ProjectFactory::random(),
-            'status' => StatusFactory::random(),
-            'title' => self::faker()->sentence(3),
             'employee' => EmployeeFactory::random(),
-            'description' => self::faker()->text(),
-            'deadline' => self::faker()->dateTime(),
         ];
     }
 
