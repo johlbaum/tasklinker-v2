@@ -14,6 +14,12 @@
 {% block body %}
 	{{ form_start(form) }}
 	{{ form_widget(form) }}
+	<br>
 	<button class="button button-submit">Continuer</button>
+
+	<script type="module">
+		$('select[multiple]').select2();
+	</script>
+
 	{{ form_end(form) }}
 {% endblock %}
