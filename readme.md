@@ -28,9 +28,11 @@ Créez un fichier `.env.local` à la racine du projet.
 
 Ajoutez la ligne suivante dans le fichier `.env.local` :
 
-DATABASE_URL="mysql://utilisateur:mot_de_passe@127.0.0.1:8889/tasklinker?charset=utf8"
+DATABASE_URL="mysql://utilisateur:mot_de_passe@127.0.0.1:3306/tasklinker?charset=utf8"
 
 Remplacez `<utilisateur>` et `<mot_de_passe>` par les valeurs appropriées pour votre environnement.
+
+Par défaut, MySQL utilise le port 3306. Si votre installation de MySQL utilise un port différent, ajustez la valeur en conséquence.
 
 ## 4. Créer la base de données
 
