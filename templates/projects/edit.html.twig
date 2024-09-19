@@ -16,5 +16,10 @@
 	{{ form_start(form) }}
 	{{ form_widget(form) }}
 	<button class="button button-submit">Modifier</button>
+
+	<script type="module">
+		$('select[multiple]').select2();
+	</script>
+
 	{{ form_end(form) }}
 {% endblock %}

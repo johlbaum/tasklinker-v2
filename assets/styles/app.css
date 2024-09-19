@@ -82,6 +82,21 @@ ul#main-menu i {
     background: #4D8077;
     height: 155px;
     padding: 30px 80px 10px 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.connected-user-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -12px;
+    background: #fff;
+    color: #1C5B50;
+    border: 1px solid lightgray;
 }
 
 div#current-user {

@@ -41,7 +41,14 @@
 				</ul>
 			</nav>
 			<main>
-				<div class="header"> {% block header %}{% endblock %}
+				<div class="header">
+					<div class="title-page"> {% block header %}{% endblock %}
+						</div>
+						{% if app.user %}
+							<a href="{{ path("app_logout") }}">
+								<p class="connected-user-avatar">{{ app.user.firstName | first}}{{app.user.lastName | first }}</p>
+							</a>
+						{% endif %}
 					</div>
 					<div id="content"> {% block body %}{% endblock %}
 						</div>
@@ -49,5 +56,5 @@
 				</body>
 			</body>
 		</html>
-	</div>
-</body></html>
+	</body>
+</html></div></body></html>

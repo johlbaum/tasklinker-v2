@@ -49,7 +49,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $entryDate = null;
 
-
     #[ORM\Column]
     private array $roles = [];
 
