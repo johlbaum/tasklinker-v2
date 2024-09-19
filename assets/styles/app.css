@@ -78,7 +78,7 @@ ul#main-menu i {
     height: 22px;
 }
 
-header {
+.header {
     background: #4D8077;
     height: 155px;
     padding: 30px 80px 10px 80px;
@@ -498,3 +498,91 @@ table#team-container thead tr th:last-child {
     max-width: 315px;
     width: 315px;
 }
+
+/* Welcome page */
+
+body.welcome-page {
+    background: url("../img/bg-welcome.png") center center no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 52px;
+}
+
+.welcome-block {
+    background-color: #4D8077;
+    border-radius: 30px;
+    width: 710px;
+    height: auto;
+    margin: auto;
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-block-content {
+    padding: 50px;
+}
+
+.welcome-block-header {
+    margin-bottom: 80px;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    width: 400px;
+    margin: 35px auto;
+    justify-content: space-between;
+}
+
+.separator hr {
+    width: 130px;
+    border: none;
+    height: 1px;
+    background: #fff;
+}
+
+.sign-in-button button {
+    width: 224px;
+    height: 74px;
+    background-color: #1C5B50;
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.sign-up-button button {
+    width: 224px;
+    height: 74px;
+    background-color: #B1D89D;
+    border-radius: 10px;
+    border: none;
+    color: #4D8077;
+    cursor: pointer;
+}
+
+/* Sign in form */
+
+#sign_in label {
+    color: #fff;
+    text-align: left;
+}
+
+#sign_up label {
+    color: #fff;
+    text-align: left;
+}
+

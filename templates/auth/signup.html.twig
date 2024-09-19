@@ -1,0 +1,16 @@
+{% extends 'base.welcome.html.twig' %}
+
+{% block title %}
+	S'inscire
+{% endblock %}
+
+{% block body %}
+	<h1 class="test">S'inscrire</h1>
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<a class="sign-in-button">
+		<button type="submit">Continuer</button>
+	</a>
+	{{ form_end(form) }}
+	<p>Vous avez déjà un compte ?</p>
+{% endblock %}

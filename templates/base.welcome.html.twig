@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}{% endblock %}
+		</title>
+		{% block javascripts %}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
+		{% endblock %}
+	</head>
+	<body class="welcome-page">
+		<header class="welcome-header">
+			<a href="{{ path('app_home') }}" id="logo">
+				<img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker"/>
+			</a>
+		</header>
+		<main id="main-container">
+
+			<div class="welcome-block"> {% block body %}{% endblock %}
+				</div>
+			</main>
+		</body>
+	</html>
+</body></html></body></html>

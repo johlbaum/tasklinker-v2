@@ -1,0 +1,16 @@
+{% extends 'base.welcome.html.twig' %}
+
+{% block title %}
+	Se connecter
+{% endblock %}
+
+{% block body %}
+	<h1>Se connecter</h1>
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<div class="sign-in-button">
+		<button type="submit">Continuer</button>
+	</div>
+	{{ form_end(form) }}
+	<p>Pas de compte ? S´inscrire</p>
+{% endblock %}
