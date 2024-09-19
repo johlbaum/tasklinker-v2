@@ -15,9 +15,7 @@ final class EmployeeFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public static function class(): string
     {
@@ -33,6 +31,7 @@ final class EmployeeFactory extends PersistentProxyObjectFactory
     {
         return [
             'email' => self::faker()->email(),
+            'password' => self::faker()->password(),
             'entryDate' => self::faker()->dateTime(),
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),

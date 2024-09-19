@@ -9,10 +9,16 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-#[UniqueEntity(['email'])]
+#[UniqueEntity(
+    fields: ['email'],
+    message: 'Cet email est déjà utilisé',
+    errorPath: 'email',
+)]
+
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
-class Employee
+class Employee implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -55,6 +61,9 @@ class Employee
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'employee')]
     private Collection $tasks;
+
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
 
     public function __construct()
     {
@@ -192,6 +201,18 @@ class Employee
     public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
         return $this;
     }
 }
