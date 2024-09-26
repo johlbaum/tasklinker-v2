@@ -52,8 +52,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    private ?string $avatar = null;
-
     /**
      * @var Collection<int, Project>
      */
@@ -197,17 +195,6 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(?string $avatar): self
-    {
-        $this->avatar = $avatar;
-        return $this;
-    }
-
     public function getPassword(): ?string
     {
         return $this->password;
@@ -256,5 +243,17 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
+
+    public function setAdmin(bool $admin): static
+    {
+        $this->roles = $admin ? ['ROLE_ADMIN'] : [];
+
+        return $this;
     }
 }
