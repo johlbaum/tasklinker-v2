@@ -19,9 +19,9 @@ class AuthController extends AbstractController
     ) {}
 
     /**
-     * Page de bienvenu.
+     * Page de bienvenue.
      */
-    #[Route('/auth', name: 'app_auth')]
+    #[Route('/auth', name: 'app_auth', methods: ['GET'])]
     public function welcomePage(): Response
     {
         return $this->render('auth/welcome.html.twig');
@@ -30,7 +30,7 @@ class AuthController extends AbstractController
     /**
      * Formulaire d'inscription.
      */
-    #[Route('/signup', name: 'app_sign_up')]
+    #[Route('/signup', name: 'app_sign_up', methods: ['GET', 'POST'])]
     public function signUpPage(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         // On crée un objet Employee.
@@ -39,16 +39,16 @@ class AuthController extends AbstractController
         // On enregistre le statut de l'employé.
         $employee->setStatus('CDI');
 
-        // On enregistre la date d'entrée de l'employé.
+        // On enregistre la date d'entrée de l'employé à la date du jour.
         $employee->setEntryDate(new \DateTime());
 
         // On génère le formulaire.
         $form = $this->createForm(SignUpType::class, $employee);
 
-        // On récupère les données de la requête (les champs du formulaire) et on les associe aux propriétés de l'objet.
+        // On récupère les données du formulaire et les associe aux propriétés de l'objet Employee.
         $form->handleRequest($request);
 
-        // On vérifie si le formulaire a été soumis et si les données respectent les contraintes de validations.
+        // On vérifie si le formulaire a été soumis et si les données respectent les contraintes de validation.
         if ($form->isSubmitted() && $form->isValid()) {
 
             // On récupère le mot de passe en clair.
@@ -60,6 +60,8 @@ class AuthController extends AbstractController
 
             // On sauvegarde l'utilisateur.
             $this->entityManagerService->save($employee);
+
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('auth/signup.html.twig', [
@@ -70,13 +72,13 @@ class AuthController extends AbstractController
     /**
      * Formulaire de connexion.
      */
-    #[Route(path: '/login', name: 'app_sign_in')]
+    #[Route(path: '/login', name: 'app_sign_in', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // get the login error if there is one
+        // On récupère l'erreur d'authentification qui s'est produite lors de la dernière tentative de connexion si elle existe.
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        // last username entered by the user
+        // On récupère le dernier nom d'utilisateur (ou email) saisi par l'utilisateur lors de sa tentative de connexion.
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('auth/signin.html.twig', [
@@ -85,7 +87,10 @@ class AuthController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
+    /**
+     * Gestion de la déconnexion.
+     */
+    #[Route(path: '/logout', name: 'app_logout', methods: ['POST'])]
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
