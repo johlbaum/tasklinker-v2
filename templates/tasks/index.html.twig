@@ -11,92 +11,45 @@
 		<div class="flex-header" s>
 			<h1>{{ project.name }}</h1>
 			<div class="user-list">
-				{% for projectEmployee in projectEmployees %}
-					<div class="avatar">{{ projectEmployee.avatar }}</div>
+				{% for projectEmployee in project.employees %}
+					<div class="avatar">
+						{{ projectEmployee.firstName | first }}{{ projectEmployee.lastName | first }}</div>
 				{% endfor %}
-
 			</div>
-			<a class="button" href="{{ path('app_project_edit', {projectId: project.id}) }}">Modifier</a>
+			{% if is_granted('ROLE_ADMIN') %}
+				<a class="button" href="{{ path('app_project_edit', {projectId: project.id}) }}">Modifier</a>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
 {% block body %}
-	<div id="tasks-container">
-		<div class="task-column">
-			<h2>To Do</h2>
-			<div class="tasks-list">
-				{% for task in tasksProject %}
-					{% if task.status.label == 'To Do' %}
-						<a class="task" href="{{ path('app_task_edit', {projectId: project.id, taskId: task.id}) }}">
-							<h3>{{ task.title }}</h3>
-							<p>{{ task.description }}</p>
-							<div class="task-infos">
-								<div class="task-deadline">
-									<i class="fa-regular fa-calendar"></i>
-									{{ task.deadline|date('d/m/Y') }}
+	<div class="tasks-container">
+		{% for status in statuses %}
+			<div id="task-container">
+				<div class="task-column">
+					<h2>{{ status.label }}</h2>
+					<div class="tasks-list">
+						{% for task in project.tasks | filter(task => task.status == status) %}
+							<a class="task" href="{{ path('app_task_edit', {projectId: project.id, taskId: task.id}) }}">
+								<h3>{{ task.title }}</h3>
+								<p>{{ task.description }}</p>
+								<div class="task-infos">
+									<div class="task-deadline">
+										<i class="fa-regular fa-calendar"></i>
+										{{ task.deadline|date('d/m/Y') }}
+									</div>
+									<div class="mini-user">
+										{{ task.employee.firstName | first }}{{ task.employee.lastName | first }}
+									</div>
 								</div>
-								<div class="mini-user">
-									{{ task.employee.avatar }}
-								</div>
-							</div>
+							</a>
+						{% endfor %}
+						<a href="{{ path('app_task_create', {projectId: project.id}) }}" class="task-add">
+							+ Ajouter une tâche
 						</a>
-					{% endif %}
-				{% endfor %}
-				<a href="{{ path('app_task_create', {projectId: project.id}) }}" class="task-add">
-					+ Ajouter une tâche
-				</a>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="task-column">
-			<h2>Doing</h2>
-			<div class="tasks-list">
-				{% for task in tasksProject %}
-					{% if task.status.label == 'Doing' %}
-						<a class="task" href="{{ path('app_task_edit', {projectId: project.id, taskId: task.id}) }}">
-							<h3>{{ task.title }}</h3>
-							<p>{{ task.description }}</p>
-							<div class="task-infos">
-								<div class="task-deadline">
-									<i class="fa-regular fa-calendar"></i>
-									{{ task.deadline|date('d/m/Y') }}
-								</div>
-								<div class="mini-user">
-									{{ task.employee.avatar }}
-								</div>
-							</div>
-
-						</a>
-					{% endif %}
-				{% endfor %}
-				<a href="{{ path('app_task_create', {projectId: project.id}) }}" class="task-add">
-					+ Ajouter une tâche
-				</a>
-			</div>
-		</div>
-		<div class="task-column">
-			<h2>Done</h2>
-			<div class="tasks-list">
-				{% for task in tasksProject %}
-					{% if task.status.label == 'Done' %}
-						<a class="task" href="{{ path('app_task_edit', {projectId: project.id, taskId: task.id}) }}">
-							<h3>{{ task.title }}</h3>
-							<p>{{ task.description }}</p>
-							<div class="task-infos">
-								<div class="task-deadline">
-									<i class="fa-regular fa-calendar"></i>
-									{{ task.deadline|date('d/m/Y') }}
-								</div>
-								<div class="mini-user">
-									{{ task.employee.avatar }}
-								</div>
-							</div>
-						</a>
-					{% endif %}
-				{% endfor %}
-				<a href="{{ path('app_task_create', {projectId: project.id}) }}" class="task-add">
-					+ Ajouter une tâche
-				</a>
-			</div>
-		</div>
+		{% endfor %}
 	</div>
 {% endblock %}
