@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
+use App\Repository\StatusRepository;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,8 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\EntityManagerService;
-use App\Service\AvatarService;
-
 
 class TasksController extends AbstractController
 {
@@ -21,8 +20,8 @@ class TasksController extends AbstractController
         private EntityManagerInterface $manager,
         private TaskRepository $taskRepository,
         private ProjectRepository $projectRepository,
+        private StatusRepository $statusRepository,
         private EntityManagerService $entityManagerService,
-        private AvatarService $avatarService
     ) {}
 
     /**
@@ -31,23 +30,18 @@ class TasksController extends AbstractController
     #[Route('/projet/{projectId}/taches', name: 'app_tasks_show', requirements: ['projectId' => '\d+'], methods: ['GET'])]
     public function showTasks(int $projectId): Response
     {
-        // On récupère le projet et les employés associés.
+        // On récupère le projet auquel les tâches sont associées.
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
-        $projectEmployees = $project->getEmployees()->toArray();
 
-        // On génère les avatars des employés associés au projet.
-        $this->avatarService->setAvatarsForProjectEmployees($projectEmployees);
+        // On restreint l'accès aux tâches à l'employé associé au projet.
+        $this->denyAccessUnlessGranted('project.is_creator', $project);
 
-        // On récupère les tâches du projet.
-        $tasksProject = $project->getTasks()->toArray();
-
-        // On génère les avatars des employés associés aux tâches.
-        $this->avatarService->setAvatarsForTaskEmployees($tasksProject);
+        // On récupère les statuts.
+        $statuses = $this->statusRepository->findAll();
 
         return $this->render('tasks/index.html.twig', [
             'project' => $project,
-            'tasksProject' => $tasksProject,
-            'projectEmployees' => $projectEmployees,
+            'statuses' => $statuses,
         ]);
     }
 
@@ -60,13 +54,15 @@ class TasksController extends AbstractController
         // On récupère le projet auquel la tâche va être associée.
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
 
-        // On crée une nouvelle tâche et on renseigne le projet auquel elle est associée.
+        // On restreint la création d'une tâche à l'employé associé au projet.
+        $this->denyAccessUnlessGranted('project.is_creator', $project);
+
+        // On crée une nouvelle tâche et on l'associe au projet.
         $task = new Task();
         $task->setProject($project);
 
         // On crée le formulaire et on ajoute les employés associés au projet en option du formulaire.
-        // Objectif : Restreindre la liste des employés sélectionnables pour une tâche aux seuls employés 
-        // participant au projet auquel la tâche est rattachée.
+        // Objectif : Restreindre la liste des employés sélectionnables aux seuls participants du projet associé à la tâche.
         $form = $this->createForm(TaskType::class, $task, [
             'projectEmployees' => $project->getEmployees()
         ]);
@@ -93,10 +89,13 @@ class TasksController extends AbstractController
         // On récupère le projet auquel la tâche est associée.
         $project = $this->entityManagerService->getEntity($this->projectRepository, $projectId);
 
+        // On restreint la mise à jour d'une tâche à l'employé associé au projet.
+        $this->denyAccessUnlessGranted('project.is_creator', $project);
+
         // On récupère la tâche à mettre à jour.
         $task = $this->entityManagerService->getEntity($this->taskRepository, $taskId);
 
-        // On crée le formulaire et on ajoute les employés associés au projet en option du formulaire.
+        // On crée le formulaire et on ajoute les employés associés au projet dans les options du formulaire.
         $form = $this->createForm(TaskType::class, $task, [
             'projectEmployees' => $project->getEmployees()
         ]);
@@ -122,7 +121,12 @@ class TasksController extends AbstractController
     #[Route('/projet/{projectId}/tache/{taskId}/suppression', name: 'app_task_delete', requirements: ['projectId' => '\d+', 'taskId' => '\d+'], methods: ['POST'])]
     public function deleteTask(int $projectId, int $taskId): Response
     {
+        // On récupère la tâche à supprimer.
         $task = $this->entityManagerService->getEntity($this->taskRepository, $taskId);
+
+        // On restreint la suppression de la tâche à l'employé associé au projet.
+        $project = $task->getProject();
+        $this->denyAccessUnlessGranted('project.is_creator', $project);
 
         $this->entityManagerService->remove($task);
 
