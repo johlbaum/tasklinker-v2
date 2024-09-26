@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\EntityManagerService;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ProjectsController extends AbstractController
 {
@@ -26,16 +27,28 @@ class ProjectsController extends AbstractController
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function showProjects(): Response
     {
-        $projects = $this->projectRepository->findActiveProjects();
+        // On récupère tous les projets non archivés.
+        $activeProjects = $this->projectRepository->findActiveProjects();
+
+        // Si l'utilisateur connecté a le rôle d'administrateur, on retourne l'ensemble des projets.
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $accessibleProjects = $activeProjects;
+        } else {
+            // Sinon, on retourne uniquement les projets auxquels l'utilisateur connecté est associé.
+            $accessibleProjects = array_filter($activeProjects, function ($project) {
+                return $project->getEmployees()->contains($this->getUser());
+            });
+        }
 
         return $this->render('projects/index.html.twig', [
-            'projects' => $projects,
+            'projects' => $accessibleProjects,
         ]);
     }
 
     /**
-     * Création d'un projet.
+     * Création d'un projet : accessible uniquement aux chefs de projet.
      */
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projet/creation', name: 'app_project_new', methods: ['POST', 'GET'])]
     public function createProject(Request $request): Response
     {
@@ -57,8 +70,9 @@ class ProjectsController extends AbstractController
     }
 
     /**
-     * Mise à jour d'un projet.
+     * Mise à jour d'un projet : accessible uniquement aux chefs de projet.
      */
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projet/{projectId}/edition', name: 'app_project_edit', requirements: ['projectId' => '\d+'], methods: ['POST', 'GET'])]
     public function editProject(int $projectId, Request $request): Response
     {
@@ -81,8 +95,9 @@ class ProjectsController extends AbstractController
     }
 
     /**
-     * Archivage d'un projet.
+     * Archivage d'un projet : accessible uniquement aux chefs de projet.
      */
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projet/{projectId}/archiver', name: 'app_project_archive', requirements: ['projectId' => '\d+'], methods: ['POST', 'GET'])]
     public function archiveProject(int $projectId): Response
     {
