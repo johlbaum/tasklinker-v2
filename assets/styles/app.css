@@ -11,6 +11,10 @@ html, body {
     font-family: 'Manrope', sans-serif;
 }
 
+input:focus {
+  outline: none;
+}
+
 .sf-toolbar {
     position: fixed;
 }
@@ -96,7 +100,10 @@ ul#main-menu i {
     margin-left: -12px;
     background: #fff;
     color: #1C5B50;
-    border: 1px solid lightgray;
+    border: 1px solid #1C5B50;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 div#current-user {
@@ -244,7 +251,7 @@ form input, form select, form textarea {
 }
 
 form {
-    width: 320px;
+    width: 350px;
 }
 
 form label {
@@ -332,7 +339,12 @@ form .select2-container--default .select2-selection--multiple .select2-selection
 
 /* Tasks */
 
-div#tasks-container {
+.tasks-container {
+    display: flex;
+    gap: 15px
+}
+
+div#task-container {
     display: flex;
     gap: 10px;
     align-items: flex-start;
@@ -346,7 +358,6 @@ div#tasks-container {
     background: white;
     border-radius: 15px;
     padding: 20px 12px;
-    max-width: calc(33.33% - 6.67px);
 }
 
 .task-column h2 {
@@ -532,25 +543,72 @@ body.welcome-page {
 }
 
 .welcome-block {
-    background-color: #4D8077;
-    border-radius: 30px;
+    background: #4D8077;
     width: 710px;
-    height: auto;
-    margin: auto;
-    text-align: center;
-    color: #fff;
+    max-width: 100%;
+    margin: 60px auto;
+    border-radius: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
-.welcome-block-content {
-    padding: 50px;
+.welcome-block-signin {
+    padding: 65px 0 45px 0;
+}
+
+.welcome-block-signup {
+    padding: 40px 0;
+}
+
+.welcome-block a {
+    color: #fff;
+}
+
+.welcome-block label {
+    color: #fff;
+}
+
+.welcome-block h1 {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 46px;
+    text-align: center;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 46px;
+}
+
+.welcome-block-header h1 {
+    margin-bottom: 24px;
+}
+
+.welcome-block-content p {
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 40px;
+    margin-bottom: 32px;
+
+}
+
+.welcome-block p a {
+    color: #fff;
+}
+
+.welcome-block-wrapper {
+    padding: 0 50px;
+    padding: 75px;
+    text-align: center;
 }
 
 .welcome-block-header {
     margin-bottom: 80px;
+}
+
+.welcome-block-header p {
+    font-size: 22px;
+    color: #fff;
 }
 
 .separator {
@@ -569,14 +627,34 @@ body.welcome-page {
     background: #fff;
 }
 
-.sign-in-button button {
-    width: 224px;
+.auth-button {
+    width: 100%;
     height: 74px;
     background-color: #1C5B50;
     border-radius: 10px;
     border: none;
     color: #fff;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 25px;
+}
+
+.auth-redirection-link,
+.auth-redirection-link a {
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 18px 0;
+    margin-right: 5px;
+}
+
+.auth-redirection-link a {
+    margin-left: 5px;
 }
 
 .sign-up-button button {
@@ -587,9 +665,30 @@ body.welcome-page {
     border: none;
     color: #4D8077;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
 }
 
-/* Sign in form */
+.sign-in-button button {
+    width: 224px;
+    height: 74px;
+    background-color: #1C5B50;
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.alert-login {
+    text-align: center;
+    margin: 26px;
+    font-weight: 800;
+    color: #fff;
+}
+
+/* Sign up form */
 
 #sign_in label {
     color: #fff;

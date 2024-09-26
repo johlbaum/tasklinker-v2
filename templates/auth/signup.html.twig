@@ -1,16 +1,18 @@
-{% extends 'base.welcome.html.twig' %}
+{% extends './auth/base_auth.html.twig' %}
 
 {% block title %}
-	S'inscire
+	Tasklinker - S'inscrire
 {% endblock %}
 
 {% block body %}
-	<h1 class="test">S'inscrire</h1>
-	{{ form_start(form) }}
-	{{ form_widget(form) }}
-	<a class="sign-in-button">
-		<button type="submit">Continuer</button>
-	</a>
-	{{ form_end(form) }}
-	<p>Vous avez déjà un compte ?</p>
+	<div class="welcome-block-signup">
+		<h1>S'inscrire</h1>
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button type="submit" class="auth-button">Continuer</button>
+		{{ form_end(form) }}
+		<a href="{{ path('app_sign_in') }}">
+			<p class="auth-redirection-link">Vous avez déjà un compte ?</p>
+		</a>
+	</div>
 {% endblock %}

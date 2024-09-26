@@ -28,7 +28,7 @@ class SignUpType extends AbstractType
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe de correspondent pas',
+                'invalid_message' => 'Les mots de passe de correspondent pas.',
                 'required' => true,
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation mot de passe'],
