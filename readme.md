@@ -1,6 +1,6 @@
 # OCR Développeur d'application PHP Symfony - Projet n° 10 : Mettez en place une gestion d'utilisateurs et d'authentification
 
-**V2 du projet tasklinker :**
+### V2 du projet tasklinker :
 
 Création des pages de connexion et d’inscription.
 
@@ -19,17 +19,17 @@ Possiblité de modifier la fiche d’un employé afin de changer son rôle.
 
 - **Chef de projet :** 
 
-E-mail : thomas.verdier@hotmail.fr 
+E-mail : thomas.verdier@hotmail.fr<br>
 Mot de passe : thomas
 
 - **Collaborateur :**
 
-E-mail : maxime.tournon@hotmail.fr 
+E-mail : maxime.tournon@hotmail.fr<br>
 Mot de passe : maxime
 
 - **Collaborateur :**
 
-E-mail : nathalie.motard@hotmail.fr
+E-mail : nathalie.motard@hotmail.fr<br>
 Mot de passe : nathalie
 
 ## Prérequis
