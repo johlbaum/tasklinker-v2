@@ -1,4 +1,36 @@
-# OCR Développeur d'application PHP Symfony - Projet n° 8 : Mettez en place un outil de gestion de projet avec Symfony
+# OCR Développeur d'application PHP Symfony - Projet n° 10 : Mettez en place une gestion d'utilisateurs et d'authentification
+
+**V2 du projet tasklinker :**
+
+Création des pages de connexion et d’inscription.
+
+Gestion des rôles d’accès : simple collaborateur et chef de projet.
+
+Possiblité de modifier la fiche d’un employé afin de changer son rôle.
+
+### Configuration de l'accès des pages en fonction des rôles :
+
+- Seuls les chefs de projet peuvent créer et modifier un projet ;
+- Seuls les chefs de projet peuvent modifier les fiches Employés ;
+- Les employés ne peuvent voir que les projets auxquels ils ont accès (à l’exception des chefs de projet qui peuvent tous les voir) ;
+- Les utilisateurs non connectés ne peuvent accéder qu’à la page de connexion et d’inscription.
+
+### Données de test : 
+
+- **Chef de projet :** 
+
+E-mail : thomas.verdier@hotmail.fr 
+Mot de passe : thomas
+
+- **Collaborateur :**
+
+E-mail : maxime.tournon@hotmail.fr 
+Mot de passe : maxime
+
+- **Collaborateur :**
+
+E-mail : nathalie.motard@hotmail.fr
+Mot de passe : nathalie
 
 ## Prérequis
 
@@ -28,7 +60,7 @@ Créez un fichier `.env.local` à la racine du projet.
 
 Ajoutez la ligne suivante dans le fichier `.env.local` :
 
-DATABASE_URL="mysql://utilisateur:mot_de_passe@127.0.0.1:3306/tasklinker?charset=utf8"
+DATABASE_URL="mysql://utilisateur:mot_de_passe@127.0.0.1:3306/tasklinker_v2?charset=utf8"
 
 Remplacez `<utilisateur>` et `<mot_de_passe>` par les valeurs appropriées pour votre environnement.
 
